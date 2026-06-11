@@ -38,27 +38,16 @@ CSV output uses companion `_context.txt` and `_mapper.csv` files because CSV doe
 
 Keep the vault and password separate from the masked output. Do not include sensitive values in the context layer.
 
-## How AI was used to build this
-
-This tool was designed and built in active collaboration with Claude. AI wasn't used just for boilerplate — it shaped the core architecture.
-
-**Security architecture.** Early versions offered selectable hash algorithms (MD5, SHA-256, SHA-512). Working through the threat model with Claude surfaced the dictionary-attack vulnerability of unsalted hashes against predictable values like campaign names and placement labels. That analysis led directly to the keyed HMAC-SHA256 approach with a per-job random key.
-
-**The vault model.** The original design combined masked data and lookup keys in a single workbook — convenient, but it puts "safe to share" and "never share" material in the same file. Claude helped reason through the threat model and spec the separate encrypted `.maskvault` design that ships in v2.0.
-
-**UI and workflow design.** The scrollable blue-and-white interface, the batch column selection model, the dimension/metric/ignore role system, show/hide password controls, and the bottom status bar were all built iteratively with Claude — adjusting after seeing each version run.
-
-**The AI Context Layer.** Claude drafted the auto-generated starter text that seeds the context blurb from actual column names in the loaded file. The goal: give users something concrete to edit instead of a blank textarea, while keeping the prompt tight enough that they won't accidentally include real values.
-
-**Documentation.** The user guide and release notes were drafted with Claude from a working spec, then reviewed and corrected against actual app behavior.
-
-The result is a production-ready workflow that lets analysts share masked data with AI tools — passing sensitive column names through HMAC, adding plain-language context about what masked dimensions represent, and restoring original values locally when needed. No sensitive identifiers leave the machine.
-
 ## Run on Windows
 
-1. Install Python 3.10 or newer from [python.org](https://www.python.org/downloads/windows/) and enable **Add Python to PATH**.
-2. Double-click `setup.bat` once.
-3. Double-click `run.bat` whenever you want to open the app.
+1. Download the project ZIP.
+2. Before extracting it, right-click the ZIP, choose **Properties**, select **Unblock**, and choose **Apply**.
+3. Extract the ZIP.
+4. Install Python 3.10 or newer from [python.org](https://www.python.org/downloads/windows/) and enable **Add Python to PATH**.
+5. Double-click `setup.bat` once.
+6. Double-click `run.bat` whenever you want to open the app.
+
+The `.bat` launchers use normal Command Prompt commands and do not bypass PowerShell execution policy. See [WINDOWS_INSTALL.md](WINDOWS_INSTALL.md) for troubleshooting and manual commands.
 
 ## Run on macOS
 
@@ -81,9 +70,10 @@ Create a ZIP containing:
 - `app.py`
 - `masking_tool/`
 - `requirements.txt`
-- Windows launchers: `setup.bat`, `run.bat`, `setup.ps1`, `run.ps1`
+- Windows launchers: `setup.bat`, `run.bat`
 - macOS launchers: `setup.command`, `run.command`, `setup-mac.sh`, `run-mac.sh`
 - `README.md`
+- `WINDOWS_INSTALL.md`
 - `Local Data Masking Tool User Guide v2.0.docx`
 
 Do not include `.venv/`, `.testdeps/`, `__pycache__/`, source data, output data, context files, mapper files, or `.maskvault` files.
